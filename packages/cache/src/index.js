@@ -41,6 +41,14 @@ let getServerStylisCache = isBrowser
       }
     })
 
+let ssrStyles
+if (isBrowser) {
+  ssrStyles = document.querySelectorAll(`style[data-emotion]`)
+  Array.prototype.forEach.call(ssrStyles, (node: HTMLStyleElement) => {
+    document.head.appendChild(node)
+  })
+}
+
 let createCache = (options?: Options): EmotionCache => {
   if (options === undefined) options = {}
   let key = options.key || 'css'
@@ -68,14 +76,17 @@ let createCache = (options?: Options): EmotionCache => {
   if (isBrowser) {
     container = options.container || document.head
 
-    const nodes = document.querySelectorAll(`style[data-emotion-${key}]`)
+    Array.prototype.forEach.call(ssrStyles, (node: HTMLStyleElement) => {
+      const attrib = node.getAttribute(`data-emotion`).split(' ')
 
-    Array.prototype.forEach.call(nodes, (node: HTMLStyleElement) => {
-      const attrib = node.getAttribute(`data-emotion-${key}`)
-      // $FlowFixMe
-      attrib.split(' ').forEach(id => {
-        inserted[id] = true
-      })
+      if (attrib[0] !== key) {
+        return
+      }
+
+      for (let i = 1; i < attrib.length; i++) {
+        inserted[attrib[i]] = true
+      }
+
       if (node.parentNode !== container) {
         container.appendChild(node)
       }
