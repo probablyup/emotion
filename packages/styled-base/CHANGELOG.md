@@ -1,5 +1,11 @@
 # @emotion/styled-base
 
+## 10.0.23
+
+### Patch Changes
+
+- [`97673098`](https://github.com/emotion-js/emotion/commit/97673098945a75b716d4cac100c1af46a5ae18f2) [#1570](https://github.com/emotion-js/emotion/pull/1570) Thanks [@FezVrasta](https://github.com/FezVrasta)! - Fixed package's Flow types
+
 ## 10.0.22
 
 ### Patch Changes
